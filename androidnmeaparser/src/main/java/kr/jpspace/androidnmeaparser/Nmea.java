@@ -11,4 +11,9 @@ public class Nmea {
     public void showToast(Context context, Resources resources) {
         Toast.makeText(context, resources.getString(R.string.app_name), Toast.LENGTH_LONG).show();
     }
+
+    // Added By Uiseok
+    public void showToast(Context context, String message){
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
 }

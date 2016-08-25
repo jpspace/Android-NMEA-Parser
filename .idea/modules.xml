@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AndroidNmeaParser.iml" filepath="$PROJECT_DIR$/AndroidNmeaParser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Android-NMEA-Parser.iml" filepath="$PROJECT_DIR$/Android-NMEA-Parser.iml" />
       <module fileurl="file://$PROJECT_DIR$/androidnmeaparser/androidnmeaparser.iml" filepath="$PROJECT_DIR$/androidnmeaparser/androidnmeaparser.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sample/app.iml" filepath="$PROJECT_DIR$/sample/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
     </modules>
   </component>
 </project>

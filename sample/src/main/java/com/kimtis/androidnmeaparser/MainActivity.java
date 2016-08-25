@@ -14,5 +14,6 @@ public class MainActivity extends AppCompatActivity {
 
         Nmea nmea = new Nmea();
         nmea.showToast(this, getResources());
+        nmea.showToast(this, "Hello World!");
     }
 }
