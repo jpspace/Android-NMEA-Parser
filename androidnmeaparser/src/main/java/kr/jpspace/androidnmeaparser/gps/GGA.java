@@ -6,7 +6,7 @@ import java.util.List;
 /**
  *
  */
-public class GPGGA {
+public class GGA {
     /*
         GPGGA = Global Positioning System Fix Data
 
@@ -47,7 +47,7 @@ public class GPGGA {
 
 
 
-    public GPGGA(String gpgga) {
+    public GGA(String gpgga) {
         this.gpgga = gpgga.split(",");
         utc = Float.valueOf(this.gpgga[1]);
         latitude = Float.valueOf(this.gpgga[2]);

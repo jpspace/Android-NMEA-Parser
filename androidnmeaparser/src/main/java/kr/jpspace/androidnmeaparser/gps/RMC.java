@@ -3,5 +3,5 @@ package kr.jpspace.androidnmeaparser.gps;
 /**
  *
  */
-public class GPGSA {
+public class RMC {
 }
