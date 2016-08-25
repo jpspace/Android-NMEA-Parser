@@ -7,39 +7,26 @@ import java.util.Map;
  *
  */
 public class Nmea {
-//    private String GPGGAString = "";
-//    private String GPGSVString = "";
-//    private String GPRMCString = "";
-//    private String GPGSAString = "";
+
 
     private Map<String,Integer> indexMap;
     private String[] nmeaArray;
-
+    private String nmea;
     public Nmea(String nmea) {
+        this.nmea = nmea;
         indexMap = new HashMap<String,Integer>();
         nmeaArray = nmea.split("\r\n");
-//        for (String s : nmeaArray) {
-//            switch (s.substring(1, 6)) {
-//                case "GPGGA":
-//                    GPGGAString += s + "\n";
-//                    break;
-//                case "GPGSV":
-//                    GPGSVString += s + "\n";
-//                    break;
-//                case "GPRMC":
-//                    GPRMCString += s + "\n";
-//                    break;
-//                case "GPGSA":
-//                    GPGSAString += s + "\n";
-//                    break;
-//            }
-//        }
         for(int i=0; i<nmeaArray.length; i++){
             String temp = nmeaArray[i].substring(1,6);
             if(!indexMap.containsKey(temp)){
                 indexMap.put(temp, i);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return nmea;
     }
 
     public String getData(String type){

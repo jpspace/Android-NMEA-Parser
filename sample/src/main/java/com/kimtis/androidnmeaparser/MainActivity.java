@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     TextView text_nmea;
     Button btn_start, btn_stop;
 
+    boolean isStarted = false;
+    String holeNmea="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,12 +81,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         final GpsStatus.NmeaListener nmeaListener = new GpsStatus.NmeaListener() {
             @Override
             public void onNmeaReceived(long timestamp, String nmea) {
-                Nmea nm = new Nmea(nmea);
-                text_nmea.append(nm.getKeys());
-//                text_nmea.append(nm.getData("GPGGA")+nm.getData("GPGSV"+nm.getData("GPRMC")+nm.getData("GPGSA")));
+                if(!isStarted) {    // first start
+                    if (nmea.substring(1, 6).equalsIgnoreCase("GPGGA")) {   // start with gpgga
+                        isStarted = true;
+                        holeNmea = "";  // initialize
+                        holeNmea += nmea;
+                    }
+                    // before start data
+                }else{  // if gpgga started
+                    if(nmea.substring(1, 6).equalsIgnoreCase("GPRMC")){ // end with gprmc
+                        isStarted = false;
+                        holeNmea += nmea;
+                        // Use Hole Nmea Data here
+                        Nmea nm = new Nmea(holeNmea);
+                        text_nmea.append(nm.getKeys()+"\n");
+                    }else{  // until the end, holeNmea data will increase
+                        holeNmea += nmea;
+                    }
+                }
             }
         };
 

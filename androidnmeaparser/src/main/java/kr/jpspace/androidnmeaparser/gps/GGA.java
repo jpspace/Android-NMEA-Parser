@@ -3,12 +3,14 @@ package kr.jpspace.androidnmeaparser.gps;
 import java.util.Arrays;
 import java.util.List;
 
+import kr.jpspace.androidnmeaparser.exception.NmeaMsgFormatException;
+
 /**
  *
  */
 public class GGA {
     /*
-        GPGGA = Global Positioning System Fix Data
+        GGA = Global Positioning System Fix Data Time, Position and fix related data for a GPS receiver
 
         1) Time (UTC)
         2) Latitude
@@ -31,39 +33,78 @@ public class GGA {
         14) Differential reference station ID, 0000-1023
         15) Checksum
      */
-    private String[] gpgga;
+    private String[] gga;
 
-    private float utc;
-    private float latitude;
-    private String latDirection;
-    private float longitude;
-    private String lonDirection;
-    private int gps_quality_indicator;
-    private int num_of_satellites;
-    private float hdp;
-    private float altitude;
-//    private String
-
-
-
-
-    public GGA(String gpgga) {
-        this.gpgga = gpgga.split(",");
-        utc = Float.valueOf(this.gpgga[1]);
-        latitude = Float.valueOf(this.gpgga[2]);
-        latDirection = this.gpgga[3];
-        longitude = Float.valueOf(this.gpgga[4]);
-        lonDirection = this.gpgga[5];
-        gps_quality_indicator = Integer.valueOf(this.gpgga[6]);
-
+    public GGA(String gga) {
+        this.gga = gga.split(",");
     }
 
-    public String[] getGpggaArray(){
-        return gpgga;
+    public float getUtc() throws NmeaMsgFormatException {
+        return Float.valueOf(this.gga[1]);
     }
 
-    public List<String> getGpggaList(){
-        return Arrays.asList(gpgga);
+    public float getLatitude() throws NmeaMsgFormatException {
+        return Float.valueOf(this.gga[2]);
+    }
+
+    public String getLatDirection() throws NmeaMsgFormatException {
+        return this.gga[3];
+    }
+
+    public float getLongitude()throws NmeaMsgFormatException {
+        return Float.valueOf(this.gga[4]);
+    }
+
+    public String getLonDirection() throws NmeaMsgFormatException {
+        return this.gga[5];
+    }
+
+    public int getGpsQualityIndicator()throws NmeaMsgFormatException {
+        return Integer.valueOf(this.gga[6]);
+    }
+
+    public int getNumOfSatellites() throws NmeaMsgFormatException {
+        return Integer.valueOf(this.gga[7]);
+    }
+
+    public float getHdp()throws NmeaMsgFormatException {
+        return Float.valueOf(this.gga[8]);
+    }
+
+    public float getAltitude()throws NmeaMsgFormatException {
+        return Float.valueOf(this.gga[9]);
+    }
+
+    public String getAltitudeUnitMeter() throws NmeaMsgFormatException {
+        return this.gga[10];
+    }
+
+    public float getDiffBetweenWgs84NGeoid()throws NmeaMsgFormatException {
+        return Float.valueOf(this.gga[11]);
+    }
+
+    public String getGeoidalSeperationMeter() throws NmeaMsgFormatException {
+        return this.gga[12];
+    }
+
+    public float getDgpsUpdateTime()throws NmeaMsgFormatException {
+        return Float.valueOf(this.gga[13]);
+    }
+
+    public String getDgpsStationId()throws NmeaMsgFormatException {
+        return this.gga[14];
+    }
+
+    public String[] getGpggaArray() {
+        try {
+            return gga;
+        } catch (Exception e) {
+            throw new NmeaMsgFormatException();
+        }
+    }
+
+    public List<String> getGpggaList()throws NmeaMsgFormatException {
+        return Arrays.asList(gga);
     }
 
 
