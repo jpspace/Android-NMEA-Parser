@@ -1,7 +1,7 @@
 package kr.jpspace.androidnmeaparser;
 
-import java.util.HashMap;
-import java.util.Map;
+import kr.jpspace.androidnmeaparser.gps.GGA;
+import kr.jpspace.androidnmeaparser.gps.GSA;
 
 /**
  *
@@ -9,32 +9,22 @@ import java.util.Map;
 public class Nmea {
 
 
-    private Map<String,Integer> indexMap;
-    private String[] nmeaArray;
-    private String nmea;
-    public Nmea(String nmea) {
-        this.nmea = nmea;
-        indexMap = new HashMap<String,Integer>();
-        nmeaArray = nmea.split("\r\n");
-        for(int i=0; i<nmeaArray.length; i++){
-            String temp = nmeaArray[i].substring(1,6);
-            if(!indexMap.containsKey(temp)){
-                indexMap.put(temp, i);
-            }
+    private static Nmea instance;
+
+    public static Nmea getInstnace() {
+        if (instance == null) {
+            instance = new Nmea();
         }
+        return instance;
     }
 
-    @Override
-    public String toString() {
-        return nmea;
+    public GGA getGGAData(String gga){
+        return new GGA(gga);
     }
 
-    public String getData(String type){
-        return nmeaArray[indexMap.get(type)];
+    public GSA getGSAData(String gsa){
+        return new GSA(gsa);
     }
 
-    public String getKeys(){
-        return indexMap.keySet().toString();
-    }
 
 }

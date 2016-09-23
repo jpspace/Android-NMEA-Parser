@@ -1,38 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kimtis.androidnmeaparser.MainActivity">
+    android:orientation="vertical"
+    tools:context="com.kimtis.androidnmeaparser.com.kimtis.MainActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:src="@mipmap/pps_fullname"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            />
+
+    </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/linear_sub"
-        android:orientation="horizontal"
-        android:layout_marginBottom="5dp"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/btn_stop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center">
+        <FrameLayout
+            android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="Stop"/>
-        <Button
-            android:id="@+id/btn_start"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Start"/>
-    </LinearLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            android:layout_height="match_parent">
+            <Button
+                android:background="@drawable/round_button_selector_skyblue"
+                android:id="@+id/btn_navigation"
+                android:gravity="center"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:textColor="@drawable/text_selector_skyblue_white"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:text="내비게이션"/>
+        </FrameLayout>
 
-        <TextView
-            android:id="@+id/text_nmea"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="" />
-    </ScrollView>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/btn_graph"
+                android:background="@drawable/round_button_selector_skyblue"
+                android:gravity="center"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="bottom|left"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="@drawable/text_selector_skyblue_white"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:text="통계"
+                />
+        </FrameLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        >
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/btn_skyplot"
+                android:background="@drawable/round_button_selector_skyblue"
+                android:gravity="center"
+                android:layout_gravity="top|right"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:textColor="@drawable/text_selector_skyblue_white"
+                android:textSize="15dp"
+                android:text="SkyPlot"
+                />
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/btn_settings"
+                android:background="@drawable/round_button_selector_skyblue"
+                android:gravity="center"
+                android:layout_gravity="top|left"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:textColor="@drawable/text_selector_skyblue_white"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:text="설정"
+                />
+        </FrameLayout>
+
+
+
+    </LinearLayout>
+
+
 </LinearLayout>

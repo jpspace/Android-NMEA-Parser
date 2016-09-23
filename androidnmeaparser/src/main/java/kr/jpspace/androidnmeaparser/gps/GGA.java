@@ -36,7 +36,7 @@ public class GGA {
     private String[] gga;
 
     public GGA(String gga) {
-        this.gga = gga.split(",");
+        this.gga = gga.substring(7, gga.length()).split(",");
     }
 
     public float getUtc() throws NmeaMsgFormatException {

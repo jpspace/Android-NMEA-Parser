@@ -1,1 +1,1 @@
-include ':sample', ':androidnmeaparser'
+include ':sample', ':androidnmeaparser', ':skyplotview'
