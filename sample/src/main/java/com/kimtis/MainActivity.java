@@ -158,12 +158,14 @@ public class MainActivity extends AppCompatActivity {
         nmeaListener = new GpsStatus.NmeaListener() {
             @Override
             public void onNmeaReceived(long timestamp, String nmea) {
+                Log.e("Full nmea", nmea);
                 LatLngAlt lla = null;
-                switch (nmea.substring(1, 6)) {
-                    case "GPGGA":
-                        // lat, lon, altitude + sea~ -> 전송
-                        GGA tempGGA = Nmea.getInstnace().getGGAData(nmea);
+                String tagString = nmea.substring(1, 6);
+                if (tagString.equals("GPGGA")) {
 
+                    // lat, lon, altitude + sea~ -> 전송
+                    GGA tempGGA = Nmea.getInstnace().getGGAData(nmea);
+                    if (!isOnGGA) {
                         try {
                             lla = new LatLngAlt();
                             lla.setLatitude(tempGGA.getLatitude());
@@ -171,15 +173,17 @@ public class MainActivity extends AppCompatActivity {
                             lla.setAltitude(tempGGA.getAltitude());
                             CachedData.getInstance().setCurrentPosition(lla);
                             CachedData.getInstance().setGgaTimeString(tempGGA.getUtcString());
-                            Log.e("gga utc string",tempGGA.getUtcString());
+                            Log.e("gga utc string", tempGGA.getUtcString());
                             isOnGGA = true;
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        break;
-                    case "GPGSA":
-                        // PRN array -> 전송 (전송 시 정렬해서 보낼 것)
-                        GSA tempGSA = Nmea.getInstnace().getGSAData(nmea);
+                    }
+                } else if (tagString.equals("GPGSA")) {
+
+                    // PRN array -> 전송 (전송 시 정렬해서 보낼 것)
+                    GSA tempGSA = Nmea.getInstnace().getGSAData(nmea);
+                    if (!isOnGSA) {
                         try {
                             if (!tempGSA.getSatelliteListUsedInFix().isEmpty())
                                 CachedData.getInstance().setPrnArrayString(tempGSA.getSatelliteListUsedInFix().toString());
@@ -187,33 +191,35 @@ public class MainActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    }
 
-                        break;
-                    case "GPGSV":
-                        // PRN, SNR 추출-> 전송x 표시만(SkyPlotView)
+                } else if (tagString.equals("GPGSV")) {
 
-                        GSV gsv = Nmea.getInstnace().getGSVData(nmea);
-                        List<SatelliteData> prn_list = gsv.getSatelliteListData();
-                        CachedData.getInstance().addSatelliteDatas(prn_list);
+                    // PRN, SNR 추출-> 전송x 표시만(SkyPlotView)
+
+                    GSV gsv = Nmea.getInstnace().getGSVData(nmea);
+                    List<SatelliteData> prn_list = gsv.getSatelliteListData();
+                    CachedData.getInstance().addSatelliteDatas(prn_list);
 
 
-                        break;
-                    case "GPRMC":
-                        // Time (UTC) -> 전송
-                        RMC rmc = Nmea.getInstnace().getRMCData(nmea);
+                } else if (tagString.equals("GPRMC")) {
+
+                    // Time (UTC) -> 전송
+                    RMC rmc = Nmea.getInstnace().getRMCData(nmea);
+                    if (!isOnRMC) {
                         try {
                             String time = rmc.getTimeOfFixUTC();
                             String date = rmc.getDateOfFix();
 
-                            if(time != null && date != null) {
-                            Date new_date = new Date(
-                                    Integer.parseInt(date.substring(4, date.length())) + 100,
-                                    Integer.parseInt(date.substring(2, 4)) - 1,
-                                    Integer.parseInt(date.substring(0, 2)),
-                                    (int)Double.parseDouble(time.substring(0, 2)),
-                                    (int)Double.parseDouble(time.substring(2, 4)),
-                                    (int)Double.parseDouble(time.substring(4, time.length()))
-                                    );
+                            if (time != null && date != null) {
+                                Date new_date = new Date(
+                                        Integer.parseInt(date.substring(4, date.length())) + 100,
+                                        Integer.parseInt(date.substring(2, 4)) - 1,
+                                        Integer.parseInt(date.substring(0, 2)),
+                                        (int) Double.parseDouble(time.substring(0, 2)),
+                                        (int) Double.parseDouble(time.substring(2, 4)),
+                                        (int) Double.parseDouble(time.substring(4, time.length()))
+                                );
                                 CachedData.getInstance().setRmcTimeString(time.toString());
                                 Log.e("rmc time string", time.toString());
                             }
@@ -224,10 +230,11 @@ public class MainActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    }
 
 
-                        break;
                 }
+
                 if (CachedData.getInstance().getRmcTimeString() != null &&
                         CachedData.getInstance().getRmcTimeString().equals(CachedData.getInstance().getGgaTimeString())
                         && isOnGGA && isOnGSA && isOnRMC) {
