@@ -155,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
         mLM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
 
-
         nmeaListener = new GpsStatus.NmeaListener() {
             @Override
             public void onNmeaReceived(long timestamp, String nmea) {
@@ -164,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     case "GPGGA":
                         // lat, lon, altitude + sea~ -> 전송
                         GGA tempGGA = Nmea.getInstnace().getGGAData(nmea);
+                        Log.e("tempGGa" , nmea);
                         try {
                             lla = new LatLngAlt();
                             lla.setLatitude(tempGGA.getLatitude());
@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                             lla.setAltitude(tempGGA.getAltitude());
                             CachedData.getInstance().setCurrentPosition(lla);
                             CachedData.getInstance().setGgaTimeString(tempGGA.getUtcString());
+                            Log.e("gga utc string",tempGGA.getUtcString());
                             isOnGGA = true;
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -202,20 +203,24 @@ public class MainActivity extends AppCompatActivity {
                         RMC rmc = Nmea.getInstnace().getRMCData(nmea);
                         try {
                             String time = rmc.getTimeOfFixUTC();
-                            Log.e("RMC time", time);
                             String date = rmc.getDateOfFix();
-                            Log.e("RMC date", date);
 
-                            if (time != null && date != null) {
-                                Date new_date = new Date(Integer.parseInt(date.substring(4, date.length() + 1)) + 100,
-                                        Integer.parseInt(date.substring(2, 4)) - 1, Integer.parseInt(date.substring(0, 2)),
-                                        Integer.parseInt(time.substring(0, 2)), Integer.parseInt(time.substring(2, 4),
-                                        Integer.parseInt(time.substring(4, time.length()))));
-                                Log.e("RMC Time to String ", new_date.toString());
-
-                                CachedData.getInstance().setRmcTime(new_date);
-                                isOnRMC = true;
+                            if(time != null && date != null) {
+                            Date new_date = new Date(
+                                    Integer.parseInt(date.substring(4, date.length())) + 100,
+                                    Integer.parseInt(date.substring(2, 4)) - 1,
+                                    Integer.parseInt(date.substring(0, 2)),
+                                    (int)Double.parseDouble(time.substring(0, 2)),
+                                    (int)Double.parseDouble(time.substring(2, 4)),
+                                    (int)Double.parseDouble(time.substring(4, time.length()))
+                                    );
+                                CachedData.getInstance().setRmcTimeString(time.toString());
+//                                Log.e("rmc time string", time.toString());
                             }
+
+
+                            isOnRMC = true;
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -223,9 +228,9 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                 }
-                if(CachedData.getInstance().getRmcTimeString() != null &&
+                if (CachedData.getInstance().getRmcTimeString() != null &&
                         CachedData.getInstance().getRmcTimeString().equals(CachedData.getInstance().getGgaTimeString())
-                        && isOnGGA && isOnGSA && isOnRMC){
+                        && isOnGGA && isOnGSA && isOnRMC) {
                     // 계산 메소드 호출
                     // TODO
 
@@ -259,11 +264,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-
-
         mLM.addNmeaListener(nmeaListener);
-
-
 
 
 //        NetworkManager.getInstnace().getPRCData(MainActivity.this, "0", "0", prn, new NetworkManager.OnResultListener<PRCDataResult>() {
@@ -334,22 +335,21 @@ public class MainActivity extends AppCompatActivity {
             LatLngAlt position,       // 보정전 위치 (NMEA)
             Date now,               // 시간 (NMEA)
             int maxIter               // 최대 루프 횟수 (임의지정)
-    ){
+    ) {
 
         String[] prn_array = CachedData.getInstance().getPrnArrayString().split(",");
-        for(int i=0; i<prn_array.length;i++){
+        for (int i = 0; i < prn_array.length; i++) {
             // 현재 스마트폰에서 보이는 위성의 위치를 계산하고 SkyPlot을 그리기 위한 위성의 정보를 저장
-            GpsSatellitePosition g= new GpsSatellitePosition();
-            int prn = (int)MessageParser.parseDouble(prn_array[i]);
+            GpsSatellitePosition g = new GpsSatellitePosition();
+            int prn = (int) MessageParser.parseDouble(prn_array[i]);
             g.setEph(datas[prn]);
             XYZ xyz = g.getSatellitePosition(ConvertFactory.toGs(now));
             AzElAngle aea = TransformationFactory.toAzEl(xyz, CachedData.getInstance().getDatum());
-            CachedData.getInstance().addSkyPlotData(aea,prn);
+            CachedData.getInstance().addSkyPlotData(aea, prn);
         }
 
         return TransformationFactory.toXyz(position);
     }
-
 
 
     @Override
@@ -369,8 +369,6 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
-
 
 
 }

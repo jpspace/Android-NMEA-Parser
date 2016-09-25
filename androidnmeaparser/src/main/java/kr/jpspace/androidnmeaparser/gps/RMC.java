@@ -25,7 +25,7 @@ public class RMC {
     }
 
     public String getDateOfFix() throws  NmeaMsgFormatException{
-        return rmc[6];
+        return rmc[8];
     }
 
 }
