@@ -8,14 +8,37 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.kimtis.data.CachedData;
+import com.kimtis.data.EstmData;
 import com.kimtis.data.constant.BasicConstant;
 import com.kimtis.graph.GraphActivity;
 import com.kimtis.navigation.NavigationActivity;
 import com.kimtis.skyplot.SkyPlotActivity;
+import com.ppsoln.commons.position.AzElAngle;
+import com.ppsoln.commons.position.LatLngAlt;
+import com.ppsoln.commons.position.XYZ;
+import com.ppsoln.commons.satellite.GpsSatellitePosition;
+import com.ppsoln.commons.utility.ConvertFactory;
+import com.ppsoln.commons.utility.MessageParser;
+import com.ppsoln.commons.utility.TransformationFactory;
+import com.ppsoln.domain.NavigationData;
+import com.ppsoln.domain.NavigationHeader;
+import com.ppsoln.domain.RtcmGpsCorrV0;
+
+import java.util.Date;
+import java.util.List;
+
+import kr.jpspace.androidnmeaparser.Nmea;
+import kr.jpspace.androidnmeaparser.SatelliteData;
+import kr.jpspace.androidnmeaparser.gps.GGA;
+import kr.jpspace.androidnmeaparser.gps.GSA;
+import kr.jpspace.androidnmeaparser.gps.GSV;
+import kr.jpspace.androidnmeaparser.gps.RMC;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,13 +55,15 @@ public class MainActivity extends AppCompatActivity {
 //    TabHost tabHost;
 
     Button btn_navi, btn_graph, btn_skyplot, btn_settings;
+    boolean isOnGGA = false, isOnGSA = false, isOnRMC = false;
+
+    int[] snr_array;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
 //        tabHost = (TabHost)findViewById(R.id.tabhost);
@@ -82,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        snr_array = new int[33];
 
         mHandler = new Handler(getMainLooper()) {
             @Override
@@ -101,31 +127,111 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-//        nmeaListener = new GpsStatus.NmeaListener() {
-//            @Override
-//            public void onNmeaReceived(long timestamp, String nmea) {
-//
-//
-//
-//                switch (nmea.substring(1, 6)) {
-//                    case "GPGGA":
-//                        GGA tempGGA = Nmea.getInstnace().getGGAData(nmea);
-//
-//                        break;
-//                    case "GPGSA":
-//                        GSA tempGSA = Nmea.getInstnace().getGSAData(nmea);
-//
-//                        break;
-//                }
-//            }
-//        };
+
+        nmeaListener = new GpsStatus.NmeaListener() {
+            @Override
+            public void onNmeaReceived(long timestamp, String nmea) {
+                LatLngAlt lla = null;
+                Toast.makeText(MainActivity.this,"Nmea is coming", Toast.LENGTH_SHORT).show();
+                switch (nmea.substring(1, 6)) {
+                    case "GPGGA":
+                        // lat, lon, altitude + sea~ -> 전송
+                        Log.e("GGA", "gga : "+nmea.substring(7,nmea.length()));
+                        GGA tempGGA = Nmea.getInstnace().getGGAData(nmea);
+                        try {
+                            lla = new LatLngAlt();
+                            lla.setLatitude(tempGGA.getLatitude());
+                            lla.setLongitude(tempGGA.getLongitude());
+                            lla.setAltitude(tempGGA.getAltitude());
+                            CachedData.getInstance().setCurrentPosition(lla);
+                            CachedData.getInstance().setGgaTimeString(tempGGA.getUtcString());
+                            isOnGGA = true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case "GPGSA":
+                        // PRN array -> 전송 (전송 시 정렬해서 보낼 것)
+                        Log.e("GSA", "gsa : "+nmea.substring(7,nmea.length()));
+                        GSA tempGSA = Nmea.getInstnace().getGSAData(nmea);
+                        try {
+                            if (!tempGSA.getSatelliteListUsedInFix().isEmpty())
+                                CachedData.getInstance().setPrnArrayString(tempGSA.getSatelliteListUsedInFix().toString());
+                            isOnGSA = true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case "GPGSV":
+                        // PRN, SNR 추출-> 전송x 표시만(SkyPlotView)
+
+                        GSV gsv = Nmea.getInstnace().getGSVData(nmea);
+                        List<SatelliteData> prn_list = gsv.getSatelliteListData();
+                        CachedData.getInstance().addSatelliteDatas(prn_list);
 
 
-//        mLM.addNmeaListener(nmeaListener);
+                        break;
+                    case "GPRMC":
+                        // Time (UTC) -> 전송
+                        Log.e("RMC", "rmc : "+nmea.substring(7,nmea.length()));
+                        RMC rmc = Nmea.getInstnace().getRMCData(nmea);
+                        try {
+                            String time = rmc.getTimeOfFixUTC();
+                            String date = rmc.getDateOfFix();
 
-        Integer[] prn = new Integer[2];
-        prn[0] = 1;
-        prn[1] = 2;
+                            if (time != null && date != null) {
+                                CachedData.getInstance().setRmcTime(new Date(Integer.parseInt(date.substring(4, date.length() + 1)) + 100,
+                                        Integer.parseInt(date.substring(2, 4)) - 1, Integer.parseInt(date.substring(0, 2)),
+                                        Integer.parseInt(time.substring(0, 2)), Integer.parseInt(time.substring(2, 4),
+                                        Integer.parseInt(time.substring(4, time.length())))));
+                                isOnRMC = true;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        break;
+                }
+                if(CachedData.getInstance().getRmcTimeString() != null &&
+                        CachedData.getInstance().getRmcTimeString().equals(CachedData.getInstance().getGgaTimeString())
+                        && isOnGGA && isOnGSA && isOnRMC){
+                    // 계산 메소드 호출
+                    // TODO
+
+
+                    EstmData estmData = new EstmData();
+                    estmData.setBefore_latLngAlt(lla);
+
+                    // 보정 전
+                    // 계산
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            XYZ xyz = nmeaCP(asdf,asdf,asdf,asdf);
+//                        }
+//                    });
+                    // 보정 후
+
+                    // CALL NmeaCP
+                    LatLngAlt modified_lla = null;
+                    estmData.setModified_latLngAlt(modified_lla);
+                    CachedData.getInstance().addEstmData(estmData);
+//                    notifyNmeaCPCalculated();
+
+                    Toast.makeText(MainActivity.this, "All Flags On", Toast.LENGTH_SHORT).show();
+                    Log.e("All Flags On", CachedData.getInstance().getEstmDataList().toString());
+
+                }
+
+            }
+        };
+
+
+
+
+        mLM.addNmeaListener(nmeaListener);
 
 
 
@@ -157,6 +263,63 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+//    public interface OnNmeaCPCalculatedListener {
+//        public void onNmeaCPCalculated();
+//    }
+//
+//    static List<OnNmeaCPCalculatedListener> nListenerList = new ArrayList<OnNmeaCPCalculatedListener>();
+//
+//    public static void registerOnNmeaCPCalculatedListener(
+//            OnNmeaCPCalculatedListener listener) {
+//        if (!nListenerList.contains(listener)) {
+//            nListenerList.add(listener);
+//        }
+//    }
+//
+//    public static void unregisterOnNmeaCPCalculatedListener(
+//            OnNmeaCPCalculatedListener listener) {
+//        nListenerList.remove(listener);
+//    }
+//
+//    public void notifyNmeaCPCalculated() {
+//        mHandler.removeCallbacks(nNotifyRunnable);
+//        mHandler.post(nNotifyRunnable);
+//    }
+//
+//    Runnable nNotifyRunnable = new Runnable() {
+//
+//        @Override
+//        public void run() {
+//            for (OnNmeaCPCalculatedListener listener : nListenerList) {
+//                listener.onNmeaCPCalculated();
+//            }
+//        }
+//    };
+
+    public static XYZ nmeaCp(
+            NavigationHeader header,   // 1개 navigation header
+            NavigationData[] datas,      // 32개 navigation data
+            RtcmGpsCorrV0[] prcs,      // 사용된 위성 Prc정보들 ()
+            LatLngAlt position,       // 보정전 위치 (NMEA)
+            Date now,               // 시간 (NMEA)
+            int maxIter               // 최대 루프 횟수 (임의지정)
+    ){
+
+        String[] prn_array = CachedData.getInstance().getPrnArrayString().split(",");
+        for(int i=0; i<prn_array.length;i++){
+            // 현재 스마트폰에서 보이는 위성의 위치를 계산하고 SkyPlot을 그리기 위한 위성의 정보를 저장
+            GpsSatellitePosition g= new GpsSatellitePosition();
+            int prn = (int)MessageParser.parseDouble(prn_array[i]);
+            g.setEph(datas[prn]);
+            XYZ xyz = g.getSatellitePosition(ConvertFactory.toGs(now));
+            AzElAngle aea = TransformationFactory.toAzEl(xyz, CachedData.getInstance().getDatum());
+            CachedData.getInstance().addSkyPlotData(aea,prn);
+        }
+
+        return TransformationFactory.toXyz(position);
+    }
+
+
 
     @Override
     public void onBackPressed() {
@@ -170,10 +333,12 @@ public class MainActivity extends AppCompatActivity {
             isBackPressed = true;
         } else {
             mHandler.removeMessages(BasicConstant.TimeOutConstant.MESSAGE_BACK_PRESSED_TIMEOUT);
+            mLM.removeNmeaListener(nmeaListener);
             super.onBackPressed();
-//            mLM.removeNmeaListener(nmeaListener);
         }
     }
+
+
 
 
 }

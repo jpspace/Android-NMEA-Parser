@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -23,9 +22,6 @@ import com.kimtis.R;
 
 import java.util.Random;
 
-import kr.jpspace.androidnmeaparser.Nmea;
-import kr.jpspace.androidnmeaparser.gps.GGA;
-import kr.jpspace.androidnmeaparser.gps.GSA;
 import uiseok.util.TypedValueCalculate;
 
 public class GraphActivity extends AppCompatActivity {
@@ -156,38 +152,7 @@ public class GraphActivity extends AppCompatActivity {
         });
 
 
-        nmeaListener = new GpsStatus.NmeaListener() {
-            @Override
-            public void onNmeaReceived(long timestamp, String nmea) {
 
-
-
-                switch (nmea.substring(1, 6)) {
-                    case "GPGGA":
-                        GGA tempGGA = Nmea.getInstnace().getGGAData(nmea);
-
-                        //TODO Network Connection
-                        n_series.appendData(new DataPoint(i, getRandom()), true, 100);
-                        e_series.appendData(new DataPoint(i, getRandom()), true, 100);
-                        v_series.appendData(new DataPoint(i, getRandom()), true, 100);
-                        //TODO text_error settext and draw new plot
-
-                        i++;
-                        break;
-                    case "GPGSA":
-                        GSA tempGSA = Nmea.getInstnace().getGSAData(nmea);
-                        String sList = "";
-                        if (tempGSA.getSatelliteListUsedInFix() != null)
-                            sList = tempGSA.getSatelliteListUsedInFix().toString();
-                        Toast.makeText(GraphActivity.this, sList, Toast.LENGTH_LONG).show();
-//                        Toast.makeText(GraphActivity.this, tempGSA.getGpgsaList().toString(), Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        };
-
-
-        mLM.addNmeaListener(nmeaListener);
 
 
         btn_start = (TextView)findViewById(R.id.btn_start);
@@ -219,7 +184,12 @@ public class GraphActivity extends AppCompatActivity {
             }
         });
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
+            }
+        });
     }
 
     @Override

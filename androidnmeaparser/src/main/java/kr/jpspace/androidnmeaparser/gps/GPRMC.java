@@ -7,4 +7,6 @@ public class GPRMC extends RMC{
     public GPRMC(String rmc) {
         super(rmc);
     }
+
+
 }

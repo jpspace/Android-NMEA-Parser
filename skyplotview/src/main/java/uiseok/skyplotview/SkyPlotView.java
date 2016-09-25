@@ -164,8 +164,8 @@ public class SkyPlotView extends View {
     }
 
 
-    public void drawSatellite(float elevation_in_degree, float azimuth_in_degree, String satellite_num, float snr) {
-        newData = new SatelliteData(elevation_in_degree, azimuth_in_degree, "G"+satellite_num, snr);
+    public void drawSatellite(double elevation_in_degree, double azimuth_in_degree, String satellite_num) {
+        newData = new SatelliteData(elevation_in_degree, azimuth_in_degree, "G"+satellite_num);
         satelliteList.add(newData);
         invalidate();
     }

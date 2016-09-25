@@ -27,6 +27,9 @@ public class SkyPlotActivity extends AppCompatActivity {
 //    Button btn_capture;
     LinearLayout linear_parent;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +39,8 @@ public class SkyPlotActivity extends AppCompatActivity {
         graph_snr = (GraphView)findViewById(R.id.graph_snr);
         spView = (SkyPlotView)findViewById(R.id.spview);
 //        spView.showDegree(false);
-        spView.drawSatellite(60, 70, "20", 10);
-        spView.drawSatellite(78, 110, "30", 10);
-        spView.drawSatellite(35, 195, "40", 10);
-        spView.drawSatellite(17, 279, "50", 10);
-        spView.drawSatellite(85, 315, "60", 10);
+
+
 
 
         // Graph SNR Settings
@@ -81,6 +81,27 @@ public class SkyPlotActivity extends AppCompatActivity {
 
     }
 
+//    MainActivity.OnNmeaCPCalculatedListener mListener = new MainActivity.OnNmeaCPCalculatedListener() {
+//        @Override
+//        public void onNmeaCPCalculated() {
+//            // TODO
+//            Log.e("Listener Activated", "activated");
+//            List<SkyPlotData> data = CachedData.getInstance().getSkyPlotData();
+//            for(int i=0; i< data.size(); i++) {
+//                spView.drawSatellite(data.get(i).getAzElAngle().getDegreeElevation(), data.get(i).getAzElAngle().getDegreeAzimuth(),data.get(i).getPrn()+"");
+//            }
+//        }
+//    };
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        MainActivity.registerOnNmeaCPCalculatedListener(mListener);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        MainActivity.unregisterOnNmeaCPCalculatedListener(mListener);
+    }
 }

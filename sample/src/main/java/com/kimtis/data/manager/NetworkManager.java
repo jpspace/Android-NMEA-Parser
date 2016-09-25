@@ -6,7 +6,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.kimtis.MyApplication;
 import com.kimtis.data.CorrectedDataResult;
-import com.kimtis.data.NavigationHeader;
 import com.kimtis.data.PRCDataResult;
 import com.kimtis.data.constant.NetworkConstant;
 import com.loopj.android.http.AsyncHttpClient;
@@ -14,6 +13,7 @@ import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.ppsoln.domain.NavigationHeader;
 
 import java.io.IOException;
 import java.security.KeyManagementException;

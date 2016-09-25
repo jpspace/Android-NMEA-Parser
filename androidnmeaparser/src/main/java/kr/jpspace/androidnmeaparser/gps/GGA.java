@@ -39,8 +39,8 @@ public class GGA {
         this.gga = gga.substring(7, gga.length()).split(",");
     }
 
-    public float getUtc() throws NmeaMsgFormatException {
-        return Float.valueOf(this.gga[1]);
+    public String getUtcString() throws NmeaMsgFormatException {
+        return this.gga[1];
     }
 
     public float getLatitude() throws NmeaMsgFormatException {
