@@ -3,6 +3,8 @@ package com.kimtis;
 import android.content.Context;
 import android.content.Intent;
 import android.location.GpsStatus;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +32,7 @@ import com.ppsoln.domain.NavigationData;
 import com.ppsoln.domain.NavigationHeader;
 import com.ppsoln.domain.RtcmGpsCorrV0;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     boolean isOnGGA = false, isOnGSA = false, isOnRMC = false;
 
     int[] snr_array;
+
+    LocationListener locationListener;
 
 
     @Override
@@ -126,13 +131,35 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.finish();
         }
 
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+        mLM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
 
 
         nmeaListener = new GpsStatus.NmeaListener() {
             @Override
             public void onNmeaReceived(long timestamp, String nmea) {
                 LatLngAlt lla = null;
-                Toast.makeText(MainActivity.this,"Nmea is coming", Toast.LENGTH_SHORT).show();
                 switch (nmea.substring(1, 6)) {
                     case "GPGGA":
                         // lat, lon, altitude + sea~ -> 전송
@@ -218,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                     LatLngAlt modified_lla = null;
                     estmData.setModified_latLngAlt(modified_lla);
                     CachedData.getInstance().addEstmData(estmData);
-//                    notifyNmeaCPCalculated();
+                    notifyNmeaCPCalculated();
 
                     Toast.makeText(MainActivity.this, "All Flags On", Toast.LENGTH_SHORT).show();
                     Log.e("All Flags On", CachedData.getInstance().getEstmDataList().toString());
@@ -232,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         mLM.addNmeaListener(nmeaListener);
+
 
 
 
@@ -263,38 +291,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    public interface OnNmeaCPCalculatedListener {
-//        public void onNmeaCPCalculated();
-//    }
-//
-//    static List<OnNmeaCPCalculatedListener> nListenerList = new ArrayList<OnNmeaCPCalculatedListener>();
-//
-//    public static void registerOnNmeaCPCalculatedListener(
-//            OnNmeaCPCalculatedListener listener) {
-//        if (!nListenerList.contains(listener)) {
-//            nListenerList.add(listener);
-//        }
-//    }
-//
-//    public static void unregisterOnNmeaCPCalculatedListener(
-//            OnNmeaCPCalculatedListener listener) {
-//        nListenerList.remove(listener);
-//    }
-//
-//    public void notifyNmeaCPCalculated() {
-//        mHandler.removeCallbacks(nNotifyRunnable);
-//        mHandler.post(nNotifyRunnable);
-//    }
-//
-//    Runnable nNotifyRunnable = new Runnable() {
-//
-//        @Override
-//        public void run() {
-//            for (OnNmeaCPCalculatedListener listener : nListenerList) {
-//                listener.onNmeaCPCalculated();
-//            }
-//        }
-//    };
+    public interface OnNmeaCPCalculatedListener {
+        public void onNmeaCPCalculated();
+    }
+
+    static List<OnNmeaCPCalculatedListener> nListenerList = new ArrayList<OnNmeaCPCalculatedListener>();
+
+    public static void registerOnNmeaCPCalculatedListener(
+            OnNmeaCPCalculatedListener listener) {
+        if (!nListenerList.contains(listener)) {
+            nListenerList.add(listener);
+        }
+    }
+
+    public static void unregisterOnNmeaCPCalculatedListener(
+            OnNmeaCPCalculatedListener listener) {
+        nListenerList.remove(listener);
+    }
+
+    public void notifyNmeaCPCalculated() {
+        mHandler.removeCallbacks(nNotifyRunnable);
+        mHandler.post(nNotifyRunnable);
+    }
+
+    Runnable nNotifyRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            for (OnNmeaCPCalculatedListener listener : nListenerList) {
+                listener.onNmeaCPCalculated();
+            }
+        }
+    };
 
     public static XYZ nmeaCp(
             NavigationHeader header,   // 1개 navigation header
@@ -333,6 +361,7 @@ public class MainActivity extends AppCompatActivity {
             isBackPressed = true;
         } else {
             mHandler.removeMessages(BasicConstant.TimeOutConstant.MESSAGE_BACK_PRESSED_TIMEOUT);
+            mLM.removeUpdates(locationListener);
             mLM.removeNmeaListener(nmeaListener);
             super.onBackPressed();
         }

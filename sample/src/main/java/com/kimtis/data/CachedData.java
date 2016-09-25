@@ -24,6 +24,7 @@ public class CachedData {
         private static final CachedData INSTANCE = new CachedData();
     }
 
+
     private CachedData() {
         datum = new LatLngAlt();
         datum = TransformationFactory.toLatLngAlt(

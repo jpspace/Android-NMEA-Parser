@@ -1,10 +1,6 @@
 package com.kimtis.graph;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.location.GpsStatus;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +25,7 @@ public class GraphActivity extends AppCompatActivity {
     GraphView graphN, graphE, graphV;
 
     LocationManager mLM;
-    GpsStatus.NmeaListener nmeaListener;
+
 
     TextView btn_stop, btn_start, btn_change;
 
@@ -128,28 +124,6 @@ public class GraphActivity extends AppCompatActivity {
 
 
 
-        mLM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mLM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-//                Toast.makeText(MainActivity.this, location.getLatitude()+" "+location.getLongitude(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        });
 
 
 
@@ -159,14 +133,14 @@ public class GraphActivity extends AppCompatActivity {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mLM.addNmeaListener(nmeaListener);
+
             }
         });
         btn_stop=(TextView)findViewById(R.id.btn_stop);
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mLM.removeNmeaListener(nmeaListener);
+
             }
         });
 
@@ -184,17 +158,7 @@ public class GraphActivity extends AppCompatActivity {
             }
         });
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
 
-            }
-        });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mLM.removeNmeaListener(nmeaListener);
-    }
 }

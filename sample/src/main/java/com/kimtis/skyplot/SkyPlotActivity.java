@@ -3,6 +3,7 @@ package com.kimtis.skyplot;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.jjoe64.graphview.GraphView;
@@ -11,7 +12,12 @@ import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.kimtis.MainActivity;
 import com.kimtis.R;
+import com.kimtis.data.CachedData;
+import com.kimtis.data.SkyPlotData;
+
+import java.util.List;
 
 import uiseok.skyplotview.SkyPlotView;
 import uiseok.util.TypedValueCalculate;
@@ -81,27 +87,27 @@ public class SkyPlotActivity extends AppCompatActivity {
 
     }
 
-//    MainActivity.OnNmeaCPCalculatedListener mListener = new MainActivity.OnNmeaCPCalculatedListener() {
-//        @Override
-//        public void onNmeaCPCalculated() {
-//            // TODO
-//            Log.e("Listener Activated", "activated");
-//            List<SkyPlotData> data = CachedData.getInstance().getSkyPlotData();
-//            for(int i=0; i< data.size(); i++) {
-//                spView.drawSatellite(data.get(i).getAzElAngle().getDegreeElevation(), data.get(i).getAzElAngle().getDegreeAzimuth(),data.get(i).getPrn()+"");
-//            }
-//        }
-//    };
+    MainActivity.OnNmeaCPCalculatedListener mListener = new MainActivity.OnNmeaCPCalculatedListener() {
+        @Override
+        public void onNmeaCPCalculated() {
+            // TODO
+            Log.e("Listener Activated", "activated");
+            List<SkyPlotData> data = CachedData.getInstance().getSkyPlotData();
+            for(int i=0; i< data.size(); i++) {
+                spView.drawSatellite(data.get(i).getAzElAngle().getDegreeElevation(), data.get(i).getAzElAngle().getDegreeAzimuth(),data.get(i).getPrn()+"");
+            }
+        }
+    };
 
     @Override
     protected void onStart() {
         super.onStart();
-//        MainActivity.registerOnNmeaCPCalculatedListener(mListener);
+        MainActivity.registerOnNmeaCPCalculatedListener(mListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-//        MainActivity.unregisterOnNmeaCPCalculatedListener(mListener);
+        MainActivity.unregisterOnNmeaCPCalculatedListener(mListener);
     }
 }
