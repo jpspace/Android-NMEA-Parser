@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     boolean isStarted = false;
     String holeNmea = "";
+    String oldNmeaTag = null;
 
     Handler mHandler;
     boolean isBackPressed = false;
@@ -161,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Full nmea", nmea);
                 LatLngAlt lla = null;
                 String tagString = nmea.substring(1, 6);
+                if (tagString.equals(oldNmeaTag)) return;
+                oldNmeaTag = tagString;
                 if (tagString.equals("GPGGA")) {
 
                     // lat, lon, altitude + sea~ -> 전송
