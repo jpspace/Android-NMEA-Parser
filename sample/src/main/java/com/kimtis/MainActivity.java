@@ -163,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
                 switch (nmea.substring(1, 6)) {
                     case "GPGGA":
                         // lat, lon, altitude + sea~ -> 전송
-                        Log.e("GGA", "gga : "+nmea.substring(7,nmea.length()));
                         GGA tempGGA = Nmea.getInstnace().getGGAData(nmea);
                         try {
                             lla = new LatLngAlt();
@@ -179,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case "GPGSA":
                         // PRN array -> 전송 (전송 시 정렬해서 보낼 것)
-                        Log.e("GSA", "gsa : "+nmea.substring(7,nmea.length()));
                         GSA tempGSA = Nmea.getInstnace().getGSAData(nmea);
                         try {
                             if (!tempGSA.getSatelliteListUsedInFix().isEmpty())
@@ -201,17 +199,21 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case "GPRMC":
                         // Time (UTC) -> 전송
-                        Log.e("RMC", "rmc : "+nmea.substring(7,nmea.length()));
                         RMC rmc = Nmea.getInstnace().getRMCData(nmea);
                         try {
                             String time = rmc.getTimeOfFixUTC();
+                            Log.e("RMC time", time);
                             String date = rmc.getDateOfFix();
+                            Log.e("RMC date", date);
 
                             if (time != null && date != null) {
-                                CachedData.getInstance().setRmcTime(new Date(Integer.parseInt(date.substring(4, date.length() + 1)) + 100,
+                                Date new_date = new Date(Integer.parseInt(date.substring(4, date.length() + 1)) + 100,
                                         Integer.parseInt(date.substring(2, 4)) - 1, Integer.parseInt(date.substring(0, 2)),
                                         Integer.parseInt(time.substring(0, 2)), Integer.parseInt(time.substring(2, 4),
-                                        Integer.parseInt(time.substring(4, time.length())))));
+                                        Integer.parseInt(time.substring(4, time.length()))));
+                                Log.e("RMC Time to String ", new_date.toString());
+
+                                CachedData.getInstance().setRmcTime(new_date);
                                 isOnRMC = true;
                             }
                         } catch (Exception e) {
@@ -247,9 +249,10 @@ public class MainActivity extends AppCompatActivity {
                     CachedData.getInstance().addEstmData(estmData);
                     notifyNmeaCPCalculated();
 
-                    Toast.makeText(MainActivity.this, "All Flags On", Toast.LENGTH_SHORT).show();
                     Log.e("All Flags On", CachedData.getInstance().getEstmDataList().toString());
-
+                    isOnGGA = false;
+                    isOnGSA = false;
+                    isOnRMC = false;
                 }
 
             }

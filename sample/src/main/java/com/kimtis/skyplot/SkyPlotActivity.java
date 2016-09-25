@@ -14,10 +14,6 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.kimtis.MainActivity;
 import com.kimtis.R;
-import com.kimtis.data.CachedData;
-import com.kimtis.data.SkyPlotData;
-
-import java.util.List;
 
 import uiseok.skyplotview.SkyPlotView;
 import uiseok.util.TypedValueCalculate;
@@ -92,10 +88,10 @@ public class SkyPlotActivity extends AppCompatActivity {
         public void onNmeaCPCalculated() {
             // TODO
             Log.e("Listener Activated", "activated");
-            List<SkyPlotData> data = CachedData.getInstance().getSkyPlotData();
-            for(int i=0; i< data.size(); i++) {
-                spView.drawSatellite(data.get(i).getAzElAngle().getDegreeElevation(), data.get(i).getAzElAngle().getDegreeAzimuth(),data.get(i).getPrn()+"");
-            }
+//            List<SkyPlotData> data = CachedData.getInstance().getSkyPlotData();
+//            for(int i=0; i< data.size(); i++) {
+//                spView.drawSatellite(data.get(i).getAzElAngle().getDegreeElevation(), data.get(i).getAzElAngle().getDegreeAzimuth(),data.get(i).getPrn()+"");
+//            }
         }
     };
 
