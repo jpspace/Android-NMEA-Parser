@@ -40,59 +40,59 @@ public class GGA {
     }
 
     public String getUtcString() throws NmeaMsgFormatException {
-        return this.gga[1];
+        return this.gga[0];
     }
 
-    public float getLatitude() throws NmeaMsgFormatException {
-        return Float.valueOf(this.gga[2]);
+    public double getLatitude() throws NmeaMsgFormatException {
+        return Double.parseDouble(this.gga[1]);
     }
 
     public String getLatDirection() throws NmeaMsgFormatException {
-        return this.gga[3];
+        return this.gga[2];
     }
 
-    public float getLongitude()throws NmeaMsgFormatException {
-        return Float.valueOf(this.gga[4]);
+    public double getLongitude()throws NmeaMsgFormatException {
+        return Double.parseDouble(this.gga[3]);
     }
 
     public String getLonDirection() throws NmeaMsgFormatException {
-        return this.gga[5];
+        return this.gga[4];
     }
 
     public int getGpsQualityIndicator()throws NmeaMsgFormatException {
-        return Integer.valueOf(this.gga[6]);
+        return Integer.valueOf(this.gga[5]);
     }
 
     public int getNumOfSatellites() throws NmeaMsgFormatException {
-        return Integer.valueOf(this.gga[7]);
+        return Integer.valueOf(this.gga[6]);
     }
 
-    public float getHdp()throws NmeaMsgFormatException {
-        return Float.valueOf(this.gga[8]);
+    public double getHdp()throws NmeaMsgFormatException {
+        return Double.parseDouble(this.gga[7]);
     }
 
-    public float getAltitude()throws NmeaMsgFormatException {
-        return Float.valueOf(this.gga[9]);
+    public double getAltitude()throws NmeaMsgFormatException {
+        return Double.parseDouble(this.gga[8]);
     }
 
     public String getAltitudeUnitMeter() throws NmeaMsgFormatException {
-        return this.gga[10];
+        return this.gga[9];
     }
 
-    public float getDiffBetweenWgs84NGeoid()throws NmeaMsgFormatException {
-        return Float.valueOf(this.gga[11]);
+    public double getDiffBetweenWgs84NGeoid()throws NmeaMsgFormatException {
+        return Double.parseDouble(this.gga[10]);
     }
 
     public String getGeoidalSeperationMeter() throws NmeaMsgFormatException {
-        return this.gga[12];
+        return this.gga[11];
     }
 
-    public float getDgpsUpdateTime()throws NmeaMsgFormatException {
-        return Float.valueOf(this.gga[13]);
+    public double getDgpsUpdateTime()throws NmeaMsgFormatException {
+        return Double.parseDouble(this.gga[12]);
     }
 
     public String getDgpsStationId()throws NmeaMsgFormatException {
-        return this.gga[14];
+        return this.gga[13];
     }
 
     public String[] getGpggaArray() {

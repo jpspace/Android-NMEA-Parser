@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     case "GPGGA":
                         // lat, lon, altitude + sea~ -> 전송
                         GGA tempGGA = Nmea.getInstnace().getGGAData(nmea);
-                        Log.e("tempGGa" , nmea);
+
                         try {
                             lla = new LatLngAlt();
                             lla.setLatitude(tempGGA.getLatitude());
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                                     (int)Double.parseDouble(time.substring(4, time.length()))
                                     );
                                 CachedData.getInstance().setRmcTimeString(time.toString());
-//                                Log.e("rmc time string", time.toString());
+                                Log.e("rmc time string", time.toString());
                             }
 
 
@@ -253,8 +253,8 @@ public class MainActivity extends AppCompatActivity {
                     estmData.setModified_latLngAlt(modified_lla);
                     CachedData.getInstance().addEstmData(estmData);
                     notifyNmeaCPCalculated();
+                    Log.e("ok", "okok");
 
-                    Log.e("All Flags On", CachedData.getInstance().getEstmDataList().toString());
                     isOnGGA = false;
                     isOnGSA = false;
                     isOnRMC = false;
