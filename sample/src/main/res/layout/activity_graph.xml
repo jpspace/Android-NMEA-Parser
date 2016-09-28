@@ -8,26 +8,210 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
+
+
+        <LinearLayout
+            android:id="@+id/linear_nev"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/graph_n"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_weight="1"
+
+                />
+
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/graph_e"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+
+                />
+
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/graph_v"
+
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+
+                />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/linear_plot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <uiseok.skyplotview.SkyPlotViewCustom
+                android:id="@+id/error_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="top"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:text="Error Value"
+
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    >
+                    <TextView
+                        android:id="@+id/text_r_hor_error"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="50dp"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:textColor="@android:color/black"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="5dp"
+                        android:lineSpacingMultiplier="1.1"
+                        android:textSize="12dp" />
+                    <TextView
+                        android:id="@+id/text_r_ver_error"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="50dp"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:textColor="@android:color/black"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="5dp"
+                        android:lineSpacingMultiplier="1.1"
+                        android:textSize="12dp" />
+                    <TextView
+                        android:id="@+id/text_r_3d_error"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="50dp"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:textColor="@android:color/black"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="5dp"
+                        android:lineSpacingMultiplier="1.1"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    >
+                    <TextView
+                        android:id="@+id/text_m_hor_error"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="50dp"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:textColor="@android:color/black"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="5dp"
+                        android:lineSpacingMultiplier="1.1"
+                        android:textSize="12dp" />
+                    <TextView
+                        android:id="@+id/text_m_ver_error"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="50dp"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:textColor="@android:color/black"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="5dp"
+                        android:lineSpacingMultiplier="1.1"
+                        android:textSize="12dp" />
+                    <TextView
+                        android:id="@+id/text_m_3d_error"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="50dp"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:textColor="@android:color/black"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="5dp"
+                        android:lineSpacingMultiplier="1.1"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="top|right"
-            >
+            android:layout_height="56dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:paddingBottom="5dp"
+            android:gravity="top|right">
 
             <TextView
                 android:id="@+id/btn_change"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/round_button_selector_darkgreen"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/round_button_selector_darkliteblue"
                 android:gravity="center"
-                android:textSize="12dp"
                 android:text="Change"
                 android:textColor="@android:color/black"
+                android:textSize="9dp"
                 android:textStyle="bold"
 
 
@@ -38,113 +222,32 @@
                 android:id="@+id/btn_stop"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/round_button_selector_darkgreen"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/round_button_selector_darkliteblue"
                 android:gravity="center"
-                android:textSize="12dp"
                 android:text="Stop"
                 android:textColor="@android:color/black"
+                android:textSize="12dp"
                 android:textStyle="bold"
-                android:layout_marginLeft="5dp"
 
                 />
+
             <TextView
                 android:id="@+id/btn_start"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
+                android:background="@drawable/round_button_selector_darkliteblue"
                 android:gravity="center"
-                android:background="@drawable/round_button_selector_darkgreen"
-                android:textSize="12dp"
                 android:text="Start"
                 android:textColor="@android:color/black"
-                android:textStyle="bold"
-                />
+                android:textSize="12dp"
+                android:textStyle="bold" />
 
 
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_nev"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            >
-
-            <com.jjoe64.graphview.GraphView
-                android:id="@+id/graph_n"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-
-                />
-
-            <com.jjoe64.graphview.GraphView
-                android:id="@+id/graph_e"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-
-                />
-            <com.jjoe64.graphview.GraphView
-                android:id="@+id/graph_v"
-
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_plot"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:orientation="vertical"
-            >
-
-            <uiseok.skyplotview.SkyPlotViewCustom
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/text_error"
-                    android:gravity="center"
-                    android:textSize="12dp"
-                    android:textColor="@android:color/black"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </ScrollView>
-
-
-
-        </LinearLayout>
-
 
     </FrameLayout>
-
 
 
 </LinearLayout>

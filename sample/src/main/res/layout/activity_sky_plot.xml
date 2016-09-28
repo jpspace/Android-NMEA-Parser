@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear_parent"
+    android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -27,20 +28,27 @@
             android:visibility="gone"
             android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
-            android:background="@drawable/round_button_selector_darkgreen"
+            android:background="@drawable/round_button_selector_darkliteblue"
             android:gravity="center"
             android:textSize="10dp"
             android:text="Screen\nCapture" />
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/text_nmea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="9dp"
+        android:gravity="center"
+        />
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph_snr"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="5dp"
+        android:layout_height="140dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="10dp" />
 
 </LinearLayout>

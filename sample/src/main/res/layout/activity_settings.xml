@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kimtis.settings.SettingsActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:background="@android:color/darker_gray"
+        android:text="Datum 설정"
+        android:textSize="25dp"
+
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:background="@android:color/white"
+        >
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Datum X : "
+            />
+        <EditText
+            android:id="@+id/edit_x"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="insert Datum X"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@android:color/white"
+            />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="25dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:background="@android:color/white"
+        >
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Datum Y : "
+            />
+        <EditText
+            android:id="@+id/edit_y"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="insert Datum Y"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@android:color/white"
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="25dp"
+        android:background="@android:color/darker_gray"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:background="@android:color/white"
+        >
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Datum Z : "
+            />
+        <EditText
+            android:id="@+id/edit_z"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="insert Datum Z"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@android:color/white"
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="25dp"
+        android:background="@android:color/darker_gray"/>
+    <Button
+        android:id="@+id/btn_enter"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/round_button_selector_darkliteblue"
+        android:gravity="center"
+        android:textSize="15dp"
+        android:text="입력" />
+
+    <LinearLayout
+        android:id="@+id/linear_now"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+    <TextView
+        android:id="@+id/text_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="15dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:gravity="center"
+        />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -57,22 +57,24 @@ public class SkyPlotView extends View {
     private void init(Context context) {
         // Initialize
         mContext = context;
+        setDrawingCacheEnabled(false);
+
+
         gridPaint = new Paint();
-        gridPaint.setStrokeWidth(TypedValueCalculate.dp2pixel(2,mContext));
+        gridPaint.setStrokeWidth(TypedValueCalculate.dp2pixel(2, mContext));
         gridPaint.setStyle(Paint.Style.STROKE);
         gridPaint.setColor(Color.rgb(68, 135, 193));
 
         dotGridPaint = new Paint();
-        dotGridPaint.setStrokeWidth(TypedValueCalculate.dp2pixel(1,mContext));
+        dotGridPaint.setStrokeWidth(TypedValueCalculate.dp2pixel(1, mContext));
         dotGridPaint.setStyle(Paint.Style.STROKE);
         dotGridPaint.setColor(Color.rgb(68, 135, 193));
         dotGridPaint.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
 
 
-
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(TypedValueCalculate.dp2pixel(12,mContext));
+        textPaint.setTextSize(TypedValueCalculate.dp2pixel(12, mContext));
         textPaint.setTextAlign(Paint.Align.CENTER);
         backgroundPaint = new Paint();
         backgroundPaint.setColor(Color.WHITE);
@@ -103,16 +105,18 @@ public class SkyPlotView extends View {
         int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
         int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-        center_point_x = parentWidth/2;
-        center_point_y = parentHeight/2;
+        center_point_x = parentWidth / 2;
+        center_point_y = parentHeight / 2;
 
     }
 
     SatelliteData newData;
 
+
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+
+        canvas.drawColor(Color.WHITE);
 
 
         // Draw SkyPlot Grid
@@ -124,33 +128,47 @@ public class SkyPlotView extends View {
         canvas.drawCircle((float) center_point_x, (float) center_point_y, (float) (center_point_x * 3 / 4 * Math.cos(Math.PI / 180 * 75)), dotGridPaint);
 
         canvas.drawLine((float) center_point_x, (float) (center_point_y - (center_point_x * 3 / 4)), (float) center_point_x, (float) (center_point_y + center_point_x * 3 / 4), dotGridPaint);
-        canvas.drawLine((float) center_point_x/4, (float) center_point_y , (float) center_point_x*7/4, (float) center_point_y , dotGridPaint);
+        canvas.drawLine((float) center_point_x / 4, (float) center_point_y, (float) center_point_x * 7 / 4, (float) center_point_y, dotGridPaint);
 
 
         if (showDegree) {
 
             // Draw Elevation degree
-            canvas.drawText("0˚", (float) center_point_x+TypedValueCalculate.dp2pixel(2,mContext), (float) (center_point_y - center_point_x * 3 / 4 - TypedValueCalculate.dp2pixel(5,mContext)), textPaint);
-            canvas.drawText("30˚", (float) center_point_x+TypedValueCalculate.dp2pixel(2,mContext), (float) (center_point_y-center_point_x*3/4*Math.cos(Math.PI/180*30)+TypedValueCalculate.dp2pixel(5,mContext)), textPaint);
-            canvas.drawText("60˚", (float) center_point_x+TypedValueCalculate.dp2pixel(2,mContext), (float) (center_point_y-center_point_x*3/4*Math.cos(Math.PI/180*60)+TypedValueCalculate.dp2pixel(5,mContext)), textPaint);
+            canvas.drawText("0˚", (float) center_point_x + TypedValueCalculate.dp2pixel(2, mContext), (float) (center_point_y - center_point_x * 3 / 4 - TypedValueCalculate.dp2pixel(5, mContext)), textPaint);
+            canvas.drawText("30˚", (float) center_point_x + TypedValueCalculate.dp2pixel(2, mContext), (float) (center_point_y - center_point_x * 3 / 4 * Math.cos(Math.PI / 180 * 30) + TypedValueCalculate.dp2pixel(5, mContext)), textPaint);
+            canvas.drawText("60˚", (float) center_point_x + TypedValueCalculate.dp2pixel(2, mContext), (float) (center_point_y - center_point_x * 3 / 4 * Math.cos(Math.PI / 180 * 60) + TypedValueCalculate.dp2pixel(5, mContext)), textPaint);
             // Draw Azimuth degree
-            canvas.drawText("270˚", (float) (center_point_x / 4 - TypedValueCalculate.dp2pixel(15,mContext)), (float) center_point_y + TypedValueCalculate.dp2pixel(3,mContext), textPaint);
-            canvas.drawText("180˚", (float) center_point_x, (float) (center_point_y + center_point_x * 3 / 4 + TypedValueCalculate.dp2pixel(15,mContext)), textPaint);
-            canvas.drawText("90˚", (float) (center_point_x + center_point_x * 3 / 4 + TypedValueCalculate.dp2pixel(15,mContext)), (float) center_point_y + TypedValueCalculate.dp2pixel(3,mContext), textPaint);
+            canvas.drawText("270˚", (float) (center_point_x / 4 - TypedValueCalculate.dp2pixel(15, mContext)), (float) center_point_y + TypedValueCalculate.dp2pixel(3, mContext), textPaint);
+            canvas.drawText("180˚", (float) center_point_x, (float) (center_point_y + center_point_x * 3 / 4 + TypedValueCalculate.dp2pixel(15, mContext)), textPaint);
+            canvas.drawText("90˚", (float) (center_point_x + center_point_x * 3 / 4 + TypedValueCalculate.dp2pixel(15, mContext)), (float) center_point_y + TypedValueCalculate.dp2pixel(3, mContext), textPaint);
 
         }
 
-        if (newData != null) {
-            for (int i = 0; i < satelliteList.size(); i++) {
-                draw_calculated_Elev_Azi_to_X_Y_Coord(canvas, satelliteList.get(i).elevation_in_degree, satelliteList.get(i).azimuth_in_degree, TypedValueCalculate.dp2pixel(4,mContext), satelliteList.get(i).satellite_num ,before_satellite_paint);
+
+        for (int i = 0; i < satelliteList.size(); i++) {
+            if (satelliteList.get(i).havePRC) {
+                draw_calculated_Elev_Azi_to_X_Y_Coord(
+                        canvas,
+                        satelliteList.get(i).elevation_in_degree,
+                        satelliteList.get(i).azimuth_in_degree,
+                        TypedValueCalculate.dp2pixel(4, mContext),
+                        satelliteList.get(i).satellite_num,
+                        current_satellite_paint);
+            } else {
+                draw_calculated_Elev_Azi_to_X_Y_Coord(
+                        canvas,
+                        satelliteList.get(i).elevation_in_degree,
+                        satelliteList.get(i).azimuth_in_degree,
+                        TypedValueCalculate.dp2pixel(4, mContext),
+                        satelliteList.get(i).satellite_num,
+                        before_satellite_paint);
             }
-            draw_calculated_Elev_Azi_to_X_Y_Coord(canvas, newData.elevation_in_degree, newData.azimuth_in_degree, TypedValueCalculate.dp2pixel(4,mContext),newData.satellite_num, current_satellite_paint);
         }
 
 
     }
 
-    private void draw_calculated_Elev_Azi_to_X_Y_Coord(Canvas canvas, double elevation, double azimuth_in_degree, int circle_size, String satellite_num ,Paint paint) {
+    private void draw_calculated_Elev_Azi_to_X_Y_Coord(Canvas canvas, double elevation, double azimuth_in_degree, int circle_size, String satellite_num, Paint paint) {
         double x = 0, y = 0;
         // calculate position
         x = center_point_x * 3 / 4 * Math.cos(elevation * Math.PI / 180) * Math.sin(azimuth_in_degree * Math.PI / 180);
@@ -160,19 +178,28 @@ public class SkyPlotView extends View {
         y = y + center_point_y;
         // draw satellite
         canvas.drawCircle((float) x, (float) y, circle_size, paint);
-        canvas.drawText(satellite_num, (float)x, (float)y-TypedValueCalculate.dp2pixel(3, mContext), textPaint);
+        canvas.drawText(satellite_num, (float) x, (float) y - TypedValueCalculate.dp2pixel(3, mContext), textPaint);
     }
 
 
-    public void drawSatellite(double elevation_in_degree, double azimuth_in_degree, String satellite_num) {
-        newData = new SatelliteData(elevation_in_degree, azimuth_in_degree, "G"+satellite_num);
+    public void addSatellite(double elevation_in_degree, double azimuth_in_degree, String satellite_num, boolean havePRC) {
+        newData = new SatelliteData(elevation_in_degree, azimuth_in_degree, "G" + satellite_num, havePRC);
         satelliteList.add(newData);
+
+    }
+
+
+    public void refreshCanvas() {
         invalidate();
+    }
+
+
+    public void removeAllSatellites() {
+        satelliteList.clear();
     }
 
     public void showDegree(boolean show) {
         this.showDegree = show;
-        invalidate();
     }
 
     public void setTextPaint(Paint paint) {
@@ -185,7 +212,7 @@ public class SkyPlotView extends View {
         invalidate();
     }
 
-    public void setDotGridPaint(Paint paint){
+    public void setDotGridPaint(Paint paint) {
         dotGridPaint = paint;
         invalidate();
     }

@@ -3,13 +3,18 @@ package com.kimtis.splash;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.kimtis.MainActivity;
 import com.kimtis.R;
@@ -17,7 +22,8 @@ import com.kimtis.R;
 public class SplashActivity extends AppCompatActivity {
 
     Handler mHandler;
-
+    boolean isFirst = true;
+    LocationManager locationManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,18 +34,54 @@ public class SplashActivity extends AppCompatActivity {
 
         mHandler = new Handler();
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Log.e("unabled", "unabled gps");
             enableGPS();
         } else {
-            mHandler.postDelayed(new Runnable() {
+//            Toast.makeText(SplashActivity.this, "Starting...", Toast.LENGTH_SHORT).show();
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+//                    finish();
+//                }
+//            }, 2000);
+            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
                 @Override
-                public void run() {
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                    finish();
+                public void onLocationChanged(Location location) {
+                    Toast.makeText(SplashActivity.this, "Starting...", Toast.LENGTH_SHORT).show();
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    }, 2000);
                 }
-            }, 2000);
+
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String s) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String s) {
+
+                }
+            }, Looper.getMainLooper());
+
+
+
+
+
+
         }
 
 
@@ -77,5 +119,17 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }, 2000);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        locationManager = null;
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        locationManager = null;
+        super.onDestroy();
     }
 }

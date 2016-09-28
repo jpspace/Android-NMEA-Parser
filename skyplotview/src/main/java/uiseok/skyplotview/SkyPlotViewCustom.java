@@ -24,6 +24,9 @@ public class SkyPlotViewCustom extends View {
 
     Context mContext;
 
+    public static final int TYPE_BEFORE = 0;
+    public static final int TYPE_MODIFIED = 1;
+
     public SkyPlotViewCustom(Context context) {
         super(context);
         init(context);
@@ -113,6 +116,7 @@ public class SkyPlotViewCustom extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        canvas.drawColor(Color.WHITE);
 
         // Draw SkyPlot Grid
         canvas.drawCircle((float) center_point_x, (float) center_point_y, (float) (center_point_x * 3 / 4), gridPaint);
@@ -131,32 +135,43 @@ public class SkyPlotViewCustom extends View {
 
         }
 
-        if (newData != null) {
-            for (int i = 0; i < nevList.size(); i++) {
-//                draw_calculated_Elev_Azi_to_X_Y_Coord(canvas, nevList.get(i).elevation_in_degree, nevList.get(i).azimuth_in_degree, TypedValueCalculate.dp2pixel(4,mContext), nevList.get(i).satellite_num , basic_point_paint);
+
+        for (int i = 0; i < nevList.size(); i++) {
+            NEVData data = nevList.get(i);
+            if (data.type == TYPE_BEFORE) {
+                draw_EN_Error_to_XY_Coord(canvas, data.e, data.n, TypedValueCalculate.dp2pixel(4, mContext), basic_point_paint);
+            } else if (data.type == TYPE_MODIFIED) {
+                draw_EN_Error_to_XY_Coord(canvas, data.e, data.n, TypedValueCalculate.dp2pixel(4, mContext), other_point_paint);
             }
-//            draw_calculated_Elev_Azi_to_X_Y_Coord(canvas, newData.elevation_in_degree, newData.azimuth_in_degree, TypedValueCalculate.dp2pixel(4,mContext),newData.satellite_num, other_point_paint);
         }
 
 
     }
 
-    private void draw_calculated_Elev_Azi_to_X_Y_Coord(Canvas canvas, double elevation, double azimuth_in_degree, int circle_size, String satellite_num, Paint paint) {
+    private void draw_EN_Error_to_XY_Coord(
+            Canvas canvas,
+            double e_value_in_meters,
+            double n_value_in_meters,
+            int circle_size,
+            Paint paint
+    ) {
         double x = 0, y = 0;
         // calculate position
-        x = center_point_x * 3 / 4 * Math.cos(elevation * Math.PI / 180) * Math.sin(azimuth_in_degree * Math.PI / 180);
-        y = -(center_point_x * 3 / 4 * Math.cos(elevation * Math.PI / 180) * Math.cos(azimuth_in_degree * Math.PI / 180));
-        // move zero point
-        x = x + center_point_x;
-        y = y + center_point_y;
-        // draw satellite
+        // 5m = center_point_x*3/4
+        x = center_point_x + e_value_in_meters * center_point_x * 3 / 4 / 5;
+        y = center_point_y - n_value_in_meters * center_point_x * 3 / 4 / 5;
+
+        // draw error
         canvas.drawCircle((float) x, (float) y, circle_size, paint);
-        canvas.drawText(satellite_num, (float) x, (float) y - TypedValueCalculate.dp2pixel(3, mContext), textPaint);
     }
 
 
-    public void drawSatellite(double n, double e, double v) {
-        newData = new NEVData(n, e, v);
+    public void drawErrorPoint(double n,
+                               double e,
+                               double v,
+                               int type
+    ) {
+        newData = new NEVData(n, e, v, type);
         nevList.add(newData);
         invalidate();
     }

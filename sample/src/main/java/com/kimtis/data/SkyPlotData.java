@@ -11,11 +11,20 @@ import java.io.Serializable;
 public class SkyPlotData implements Serializable {
     private int prn;
     private AzElAngle azElAngle;
+    private boolean havePRC;
 
+    public boolean isHavePRC() {
+        return havePRC;
+    }
 
-    public SkyPlotData(int prn, AzElAngle azElAngle) {
+    public void setHavePRC(boolean havePRC) {
+        this.havePRC = havePRC;
+    }
+
+    public SkyPlotData(int prn, AzElAngle azElAngle, boolean havePRC) {
         this.prn = prn;
         this.azElAngle = azElAngle;
+        this.havePRC = havePRC;
     }
 
     public int getPrn() {

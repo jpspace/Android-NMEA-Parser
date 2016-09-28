@@ -29,4 +29,10 @@ public class MyApplication extends Application{
     public static Context getContext() {
         return mContext;
     }
+
+//    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(base);
+//        MultiDex.install(this);
+//    }
 }

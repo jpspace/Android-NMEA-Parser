@@ -65,7 +65,7 @@ public class GSV {
             result.add(item);
             item = new SatelliteData();
             item.setPrn(gsv[15]);
-            item.setSnr((int) Double.parseDouble(gsv[18]));
+            item.setSnr((int) Double.parseDouble(gsv[18].substring(0, gsv[18].indexOf('*'))));
             result.add(item);
         }catch(Exception e){
             e.printStackTrace();

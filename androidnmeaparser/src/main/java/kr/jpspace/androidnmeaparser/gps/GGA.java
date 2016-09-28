@@ -44,22 +44,28 @@ public class GGA {
     }
 
     public double getLatitude() throws NmeaMsgFormatException {
-        return Double.parseDouble(this.gga[1]);
+        String lat = this.gga[1];
+        double degree = Double.parseDouble(lat.substring(0, 2));
+        double minute = Double.parseDouble(lat.substring(2, lat.length()));
+        return degree + minute / 60;
     }
 
     public String getLatDirection() throws NmeaMsgFormatException {
         return this.gga[2];
     }
 
-    public double getLongitude()throws NmeaMsgFormatException {
-        return Double.parseDouble(this.gga[3]);
+    public double getLongitude() throws NmeaMsgFormatException {
+        String lon = this.gga[3];
+        double degree = Double.parseDouble(lon.substring(0, 3));
+        double minute = Double.parseDouble(lon.substring(3, lon.length()));
+        return degree + minute / 60;
     }
 
     public String getLonDirection() throws NmeaMsgFormatException {
         return this.gga[4];
     }
 
-    public int getGpsQualityIndicator()throws NmeaMsgFormatException {
+    public int getGpsQualityIndicator() throws NmeaMsgFormatException {
         return Integer.valueOf(this.gga[5]);
     }
 
@@ -67,19 +73,19 @@ public class GGA {
         return Integer.valueOf(this.gga[6]);
     }
 
-    public double getHdp()throws NmeaMsgFormatException {
+    public double getHdp() throws NmeaMsgFormatException {
         return Double.parseDouble(this.gga[7]);
     }
 
-    public double getAltitude()throws NmeaMsgFormatException {
-        return Double.parseDouble(this.gga[8]);
+    public double getAltitude() throws NmeaMsgFormatException {
+        return Double.parseDouble(this.gga[8])+Double.parseDouble(this.gga[10]);
     }
 
     public String getAltitudeUnitMeter() throws NmeaMsgFormatException {
         return this.gga[9];
     }
 
-    public double getDiffBetweenWgs84NGeoid()throws NmeaMsgFormatException {
+    public double getDiffBetweenWgs84NGeoid() throws NmeaMsgFormatException {
         return Double.parseDouble(this.gga[10]);
     }
 
@@ -87,11 +93,11 @@ public class GGA {
         return this.gga[11];
     }
 
-    public double getDgpsUpdateTime()throws NmeaMsgFormatException {
+    public double getDgpsUpdateTime() throws NmeaMsgFormatException {
         return Double.parseDouble(this.gga[12]);
     }
 
-    public String getDgpsStationId()throws NmeaMsgFormatException {
+    public String getDgpsStationId() throws NmeaMsgFormatException {
         return this.gga[13];
     }
 
@@ -103,7 +109,7 @@ public class GGA {
         }
     }
 
-    public List<String> getGpggaList()throws NmeaMsgFormatException {
+    public List<String> getGpggaList() throws NmeaMsgFormatException {
         return Arrays.asList(gga);
     }
 
